@@ -18,14 +18,14 @@ def main():
     parser.add_argument('--plot', action='store_true', help='plots data instead of saving it')
     parser.add_argument('--crop', action='store_true', help='crops image and saves a reduced fits file')
     args = parser.parse_args()
-    
+
     # load image, and obtain rgb matrix
     raw = rawpy.imread(args.image)
     rgb = raw.postprocess(rawpy.Params(output_color=rawpy.ColorSpace.raw, highlight_mode=rawpy.HighlightMode.Ignore)).astype(np.float32)
     red = 0
     green = 1
     blue = 2
-    
+
     # combine colors and create fits HDU (full image)
     combined = rgb[:,:,red] + rgb[:,:,green] + rgb[:,:,blue]
     new_hdu = fits.PrimaryHDU(combined)
@@ -65,24 +65,24 @@ def main():
 
     # names of the fits files
     if args.image.lower().endswith("cr2") or args.image.lower().endswith("nef"):
-        fits_name = '{}.fits'.format(args.image[:-4])
+        fits_name = '{}.fits.gz'.format(args.image[:-4])
         if args.crop:
-            fits_name_reduced = '{}_reduced.fits'.format(args.image[:-4])
+            fits_name_reduced = '{}_reduced.fits.gz'.format(args.image[:-4])
     else:
         print ("could not detect format in image {}".format(args.image))
 
     # save data
     if not args.plot:
         try:
-            print ("full fits file saved to {}".format(fits_name))
             new_hdu.writeto(fits_name)
+            print ("full fits file saved to {}".format(fits_name))
         except IOError:
             os.remove(fits_name)
             new_hdu.writeto(fits_name)
         if args.crop:
             try:
-                print ("reduced fits file saved to {}".format(fits_name_reduced))
                 new_hdu_reduced.writeto(fits_name_reduced)
+                print ("reduced fits file saved to {}".format(fits_name_reduced))
             except IOError:
                 os.remove(fits_name_reduced)
                 new_hdu_reduced.writeto(fits_name_reduced)
