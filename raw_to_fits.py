@@ -7,17 +7,8 @@ import astropy.io.fits as fits
 import numpy as np
 import matplotlib.pyplot as plt
 
-def main():
-    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, description="Transforms raw camera data to fits")
-    parser.add_argument('image', type=str, default=None, help='image name, required')
-    parser.add_argument('--xmin', type=int, default=1000, help='minimum pixel in x to be saved in the reduced fits file (requires --manual option)')
-    parser.add_argument('--xmax', type=int, default=3000, help='maximum pixel in x to be saved in the reduced fits file (requires --manual option)')
-    parser.add_argument('--ymin', type=int, default=1000, help='minimum pixel in y to be saved in the reduced fits file (requires --manual option)')
-    parser.add_argument('--ymax', type=int, default=2200, help='maximum pixel in y to be saved in the reduced fits file (requires --manual option)')
-    parser.add_argument('--manual', action='store_true', help='choose the interval (requires --crop option)')
-    parser.add_argument('--plot', action='store_true', help='plots data instead of saving it')
-    parser.add_argument('--crop', action='store_true', help='crops image and saves a reduced fits file')
-    args = parser.parse_args()
+def main(args):
+    
 
     # load image, and obtain rgb matrix
     raw = rawpy.imread(args.image)
@@ -64,7 +55,7 @@ def main():
         new_hdu_reduced = fits.PrimaryHDU(combined_reduced)
 
     # names of the fits files
-    if args.image.lower().endswith("cr2") or args.image.lower().endswith("nef"):
+    if args.image.lower().endswith("cr2") or args.image.lower().endswith("nef") or args.image.lower().endswith("arw"):
         fits_name = '{}.fits.gz'.format(args.image[:-4])
         if args.crop:
             fits_name_reduced = '{}_reduced.fits.gz'.format(args.image[:-4])
@@ -100,4 +91,16 @@ def main():
         plt.show()
 
 if __name__ == "__main__":
-    main()
+    
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter, description="Transforms raw camera data to fits")
+    parser.add_argument('image', type=str, default=None, help='image name, required')
+    parser.add_argument('--xmin', type=int, default=1000, help='minimum pixel in x to be saved in the reduced fits file (requires --manual option)')
+    parser.add_argument('--xmax', type=int, default=3000, help='maximum pixel in x to be saved in the reduced fits file (requires --manual option)')
+    parser.add_argument('--ymin', type=int, default=1000, help='minimum pixel in y to be saved in the reduced fits file (requires --manual option)')
+    parser.add_argument('--ymax', type=int, default=2200, help='maximum pixel in y to be saved in the reduced fits file (requires --manual option)')
+    parser.add_argument('--manual', action='store_true', help='choose the interval (requires --crop option)')
+    parser.add_argument('--plot', action='store_true', help='plots data instead of saving it')
+    parser.add_argument('--crop', action='store_true', help='crops image and saves a reduced fits file')
+    args = parser.parse_args()
+    
+    main(args)
