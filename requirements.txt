@@ -1,0 +1,5 @@
+astropy >= 8.0.0
+jupyterlab >= 4.6.1
+matplotlib >= 3.11.0
+numpy >= 2.5.0
+rawpy
