@@ -3,7 +3,7 @@ Code to illustrate the behaviour of standard candles
 
 ## Introduction
 This code has two steps
-1. Convert RAW images (.NEF or .CR2) to fits files. For example the code 
+1. Convert RAW images (.NEF, .CR2 or .ARW) to fits files. For example the code 
   `python raw_to_fits.py examples/DSC_0042.NEF`
   will produce the file `examples/DSC_0042.fits`
 
